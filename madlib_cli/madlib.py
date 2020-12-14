@@ -21,6 +21,7 @@ print(template)
 
 # Read, Parse, Merge ---------------------------------------
 def read_template(filepath):
+    """Open and read file. If file not found, raise Exception Error"""
     try:
         with open(filepath, "r") as story:
             contents = story.read()
@@ -30,7 +31,6 @@ def read_template(filepath):
 
 def parse_template(tempstring):
     """Add each character from tempstring to stripped string, stopping at "{" if found. Append everything after the "}" to stripped string. Finally, add parts to parts list""" 
-
     found = False
     stripped = ""
     parts = []
@@ -52,6 +52,7 @@ def parse_template(tempstring):
 parse_template("It was a {Adjective} and {Adjective} {Noun}.")
 
 def merge(bare_temp, string):
+    """Merge string words to the bare template"""
     merged_string = bare_temp.format(*string)
     return(merged_string)
 merge("It was a {} and {} {}.", ("dark", "stormy", "night"))
