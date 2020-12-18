@@ -1,23 +1,36 @@
-# Template -----------------------------------------------
-bienvenidos = "Welcome to the Pirate Story. Please provide a word that matches the specified category!"
-print(bienvenidos)
+import re
+def welcome_message():
+    """Prints welcome message.
+    """
+    bienvenidos = "Welcome to the Pirate Story. Please provide a word that matches the specified category!"
+    print(bienvenidos)
 
-Noun = input('noun > ')
-Adjective = input('adjective > ')
-Verb = input('verb > ')
-Adverb = input('adverb > ')
-Noun2 = input('noun > ')
-Adjective2 = input('adjective > ')
-Pluralnoun = input('plural noun > ')
-Bodypart = input('body part > ')
-Noun3 = input('noun > ')
-Noun4 = input('noun > ')
-Noun5 = input('noun > ')
-Noun6 = input('noun > ')
-Bodypart2 = input('body part > ')
+def get_user_input(prompt):
+    """Prompts the user for their input.
 
-template = f"Ye can always pretend to be a bloodthirsty {Noun}, threatening everyone by waving yer {Adjective} sword in the air, but until ye learn to {Verb} like a pirate, ye'll never be {Adverb} accepted as an authentic {Noun2}. So here's what ye do: Cleverly work into yer daily conversations {Adjective2} private phrases such as \"Ahoy there, {Pluralnoun},\" Remember to drop all yer gs when ye say such words as sailin', spittin', and fightin'. This will give ye a/an {Bodypart} start to being recognized as a swashbucklin' {Noun3}. Once ye have the lingo down pat, it helps to wear a three-cornered {Noun4} on yer head, stash a/an {Noun5} in yer pants, and keep a/an {Noun6} perched atop yer {Bodypart2}. Aye, now ye be a real prirate!"
-print(template)
+    Args:
+        prompt (string): replacement word
+
+    Returns:
+        string : "Please enter {replacement word / prompt}"
+    """
+    user_input = input(f'Please enter {prompt}\n>>')
+    return user_input
+
+def collect_inputs(answer_list):
+    """Collects input from user and puts it into a list.
+
+    Args:
+        answer_list (tuple): tuple of inputted answers from user
+
+    Returns:
+        [list]: returns a complete list of inputted answers
+    """
+    answers = []
+    for question in answer_list:
+        answer = get_user_input(question)
+        answers.append(answer)
+    return answers
 
 # Read, Parse, Merge ---------------------------------------
 def read_template(filepath):
@@ -49,13 +62,35 @@ def parse_template(tempstring):
         else:
             parts_char += char 
     return stripped, tuple(parts)
-parse_template("It was a {Adjective} and {Adjective} {Noun}.")
 
 def merge(bare_temp, string):
     """Merge string words to the bare template"""
     merged_string = bare_temp.format(*string)
     return(merged_string)
-merge("It was a {} and {} {}.", ("dark", "stormy", "night"))
+
+# Save Template and Start Game ---------------------------------------
+def save_template(template):
+    """Saves the template to a filepath.
+
+    Args:
+        template (string): overwritten template with inputted answers
+    """
+    file = open("../assets/story.txt", 'w')
+    file.write(template)
+    file.close()
+
+def start_game():
+    """Starts the game and prints out the completed story!
+    """
+    welcome_message()
+    string = read_template("../assets/template.txt")
+    template, correct_list = parse_template(string)
+    answers = collect_inputs(correct_list)
+    completed = merge(template, answers)
+    print(completed)
+
+if __name__ == "__main__":
+    start_game()
 
 
 # Attribution for chaining replace (didn't end up using after revising code): https://stackoverflow.com/questions/3411771/best-way-to-replace-multiple-characters-in-a-string
